@@ -25,23 +25,35 @@ export function activate(context: vscode.ExtensionContext) {
 
         console.log("Line prefix:", linePrefix);
 
-        // Handle useSelect
-        if (linePrefix.includes("useSelect")) {
-          console.log("Found useSelect in line");
+        // Handle select() calls
+        if (linePrefix.includes("select(")) {
+          console.log("Found select( in line prefix");
 
-          // Check if we're inside a select() call with a store name
-          const lineText = document.lineAt(position).text;
-          const selectMatch = lineText.match(/select\(['"]([^'"]*)['"]\)\./);
-          console.log("Select match:", selectMatch);
+          // If we're at select(, show store suggestions
+          if (linePrefix.endsWith("select(")) {
+            console.log("Providing store suggestions");
+            return dataStores.map((store) => {
+              const completionItem = new vscode.CompletionItem(
+                `'${store}'`,
+                vscode.CompletionItemKind.Value
+              );
+              completionItem.detail = "WordPress Data Store";
+              completionItem.documentation = new vscode.MarkdownString(
+                `Select data from the ${store} store`
+              );
+              return completionItem;
+            });
+          }
 
-          if (selectMatch && selectMatch[1]) {
-            // We're inside a select() call with a store name and dot
-            const storeName = selectMatch[1];
-            console.log("Store name:", storeName);
+          // If we have a store name followed by a dot, show selectors
+          const storeMatch = linePrefix.match(
+            /select\(['"]?([^'")]*)['"]?\)\./
+          );
+          if (storeMatch && storeMatch[1]) {
+            const storeName = storeMatch[1];
+            console.log("Found store name:", storeName);
 
             const selectors = storeSelectors[storeName];
-            console.log("Available selectors:", selectors);
-
             if (selectors) {
               return selectors.map((selector) => {
                 const completionItem = new vscode.CompletionItem(
@@ -51,23 +63,6 @@ export function activate(context: vscode.ExtensionContext) {
                 completionItem.detail = `Selector: ${selector.name}`;
                 completionItem.documentation = new vscode.MarkdownString(
                   `**${selector.name}**\n\n${selector.description}`
-                );
-                return completionItem;
-              });
-            }
-          } else {
-            // Check if we're at the store selection point
-            const storeSelectionMatch = linePrefix.match(/select\(['"]/);
-            if (storeSelectionMatch) {
-              console.log("Providing store suggestions for useSelect");
-              return dataStores.map((store) => {
-                const completionItem = new vscode.CompletionItem(
-                  store,
-                  vscode.CompletionItemKind.Value
-                );
-                completionItem.detail = "WordPress Data Store";
-                completionItem.documentation = new vscode.MarkdownString(
-                  `Select data from the ${store} store`
                 );
                 return completionItem;
               });
@@ -85,7 +80,7 @@ export function activate(context: vscode.ExtensionContext) {
             console.log("Providing store suggestions for useDispatch");
             return dataStores.map((store) => {
               const completionItem = new vscode.CompletionItem(
-                store,
+                `'${store}'`,
                 vscode.CompletionItemKind.Value
               );
               completionItem.detail = "WordPress Data Store";
