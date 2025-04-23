@@ -104,13 +104,93 @@ const storeSelectors: Record<
   ],
 };
 
+// Store dispatch actions mapping
+const storeActions: Record<
+  string,
+  Array<{ name: string; description: string }>
+> = {
+  "core/block-editor": [
+    {
+      name: "insertBlock",
+      description: "Insert a block at the specified position",
+    },
+    { name: "removeBlock", description: "Remove a block by its client ID" },
+    { name: "moveBlock", description: "Move a block to a new position" },
+    { name: "updateBlock", description: "Update a block's attributes" },
+    { name: "selectBlock", description: "Select a block by its client ID" },
+  ],
+  "core/editor": [
+    { name: "editPost", description: "Edit the current post" },
+    { name: "savePost", description: "Save the current post" },
+    { name: "trashPost", description: "Move the current post to trash" },
+    { name: "updatePost", description: "Update the current post" },
+    { name: "lockPostSaving", description: "Lock post saving" },
+  ],
+  "core/notices": [
+    { name: "createNotice", description: "Create a new notice" },
+    { name: "removeNotice", description: "Remove a notice by its ID" },
+    { name: "removeAllNotices", description: "Remove all notices" },
+  ],
+  "core/interface": [
+    {
+      name: "enableComplementaryArea",
+      description: "Enable a complementary area",
+    },
+    {
+      name: "disableComplementaryArea",
+      description: "Disable a complementary area",
+    },
+    { name: "pinItem", description: "Pin an item" },
+    { name: "unpinItem", description: "Unpin an item" },
+  ],
+  "core/data": [
+    { name: "addEntities", description: "Add entities to the store" },
+    { name: "receiveEntityRecords", description: "Receive entity records" },
+    { name: "saveEntityRecord", description: "Save an entity record" },
+  ],
+  "core/edit-post": [
+    { name: "openGeneralSidebar", description: "Open the general sidebar" },
+    { name: "closeGeneralSidebar", description: "Close the general sidebar" },
+    { name: "toggleFeature", description: "Toggle a feature" },
+  ],
+  "core/edit-site": [
+    { name: "setTemplate", description: "Set the current template" },
+    { name: "setPage", description: "Set the current page" },
+    {
+      name: "setNavigationPanelActiveMenu",
+      description: "Set the active menu in the navigation panel",
+    },
+  ],
+  "core/navigation": [
+    { name: "setSelectedMenuId", description: "Set the selected menu ID" },
+    { name: "setNavigationPost", description: "Set the navigation post" },
+  ],
+  "core/preferences": [
+    { name: "set", description: "Set a preference value" },
+    { name: "toggle", description: "Toggle a preference" },
+  ],
+  "core/rich-text": [
+    { name: "applyFormat", description: "Apply a format to the selected text" },
+    {
+      name: "removeFormat",
+      description: "Remove a format from the selected text",
+    },
+  ],
+  "core/viewport": [
+    {
+      name: "setIsMatching",
+      description: "Set whether the viewport matches a query",
+    },
+  ],
+};
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
   console.log('Extension "wp-data-stores" is now active!');
 
   // Register completion provider for JavaScript/TypeScript files
-  const useSelectProvider = vscode.languages.registerCompletionItemProvider(
+  const hooksProvider = vscode.languages.registerCompletionItemProvider(
     ["javascript", "typescript", "javascriptreact", "typescriptreact"],
     {
       provideCompletionItems(
@@ -124,16 +204,16 @@ export function activate(context: vscode.ExtensionContext) {
 
         console.log("Line prefix:", linePrefix);
 
-        // Check if we're in a useSelect call
+        // Handle useSelect
         if (linePrefix.includes("useSelect")) {
           console.log("Found useSelect in line");
 
-          // Check if we're inside a select() call
-          const selectMatch = linePrefix.match(/select\(['"]([^'"]*)['"]\)/);
+          // Check if we're inside a select() call with a store name
+          const selectMatch = linePrefix.match(/select\(['"]([^'"]*)['"]\)\./);
           console.log("Select match:", selectMatch);
 
           if (selectMatch && selectMatch[1]) {
-            // We're inside a select() call with a store name
+            // We're inside a select() call with a store name and dot
             const storeName = selectMatch[1];
             console.log("Store name:", storeName);
 
@@ -154,8 +234,61 @@ export function activate(context: vscode.ExtensionContext) {
               });
             }
           } else {
+            // Check if we're at the store selection point
+            const storeSelectionMatch = linePrefix.match(/select\(['"]/);
+            if (storeSelectionMatch) {
+              console.log("Providing store suggestions for useSelect");
+              return dataStores.map((store) => {
+                const completionItem = new vscode.CompletionItem(
+                  store,
+                  vscode.CompletionItemKind.Value
+                );
+                completionItem.detail = "WordPress Data Store";
+                completionItem.documentation = new vscode.MarkdownString(
+                  `Select data from the ${store} store`
+                );
+                return completionItem;
+              });
+            }
+          }
+        }
+
+        // Handle useDispatch
+        if (linePrefix.includes("useDispatch")) {
+          console.log("Found useDispatch in line");
+
+          // Check if we're in a destructuring pattern
+          const destructuringMatch = linePrefix.match(/\{\s*([^}]*)\s*\}/);
+          console.log("Destructuring match:", destructuringMatch);
+
+          if (destructuringMatch) {
+            // We're in a destructuring pattern, provide action names
+            const storeMatch = linePrefix.match(
+              /useDispatch\(\s*['"]([^'"]*)['"]\s*\)/
+            );
+            console.log("Store match:", storeMatch);
+
+            if (storeMatch && storeMatch[1]) {
+              const storeName = storeMatch[1];
+              const actions = storeActions[storeName];
+
+              if (actions) {
+                return actions.map((action) => {
+                  const completionItem = new vscode.CompletionItem(
+                    action.name,
+                    vscode.CompletionItemKind.Method
+                  );
+                  completionItem.detail = `Action: ${action.name}`;
+                  completionItem.documentation = new vscode.MarkdownString(
+                    action.description
+                  );
+                  return completionItem;
+                });
+              }
+            }
+          } else {
             // We're at the store selection point
-            console.log("Providing store suggestions");
+            console.log("Providing store suggestions for useDispatch");
             return dataStores.map((store) => {
               const completionItem = new vscode.CompletionItem(
                 store,
@@ -163,7 +296,7 @@ export function activate(context: vscode.ExtensionContext) {
               );
               completionItem.detail = "WordPress Data Store";
               completionItem.documentation = new vscode.MarkdownString(
-                `Select data from the ${store} store`
+                `Dispatch actions from the ${store} store`
               );
               return completionItem;
             });
@@ -175,10 +308,12 @@ export function activate(context: vscode.ExtensionContext) {
     },
     "'",
     '"',
-    "."
+    ".",
+    "{",
+    "}"
   );
 
-  context.subscriptions.push(useSelectProvider);
+  context.subscriptions.push(hooksProvider);
 
   // The command has been defined in the package.json file
   const disposable = vscode.commands.registerCommand(
