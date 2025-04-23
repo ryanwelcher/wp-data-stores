@@ -4,11 +4,16 @@ import * as vscode from "vscode";
 import { dataStores } from "./stores";
 import { storeSelectors } from "./selectors";
 import { storeActions } from "./actions";
+import { StoreTreeDataProvider } from "./storeTreeDataProvider";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
   console.log('Extension "wp-data-stores" is now active!');
+
+  // Register the tree data provider for the store view
+  const storeTreeDataProvider = new StoreTreeDataProvider();
+  vscode.window.registerTreeDataProvider("wpDataStores", storeTreeDataProvider);
 
   // Register completion provider for JavaScript/TypeScript files
   const hooksProvider = vscode.languages.registerCompletionItemProvider(

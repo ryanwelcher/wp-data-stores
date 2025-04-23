@@ -22,7 +22,25 @@
         "command": "wp-data-stores.helloWorld",
         "title": "Hello World"
       }
-    ]
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "wp-data-stores",
+          "title": "WordPress Data Stores",
+          "icon": "$(database)"
+        }
+      ]
+    },
+    "views": {
+      "wp-data-stores": [
+        {
+          "id": "wpDataStores",
+          "name": "Data Stores",
+          "type": "tree"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

@@ -1,7 +1,7 @@
 // Common WordPress data stores
 export const dataStores = [
   "core", // @wordpress/core-data
-  "core/annotations",
+  // "core/annotations",
   "core/block-directory",
   "core/block-editor",
   "core/blocks",
