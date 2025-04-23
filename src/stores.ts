@@ -1,5 +1,6 @@
 // Common WordPress data stores
 export const dataStores = [
+  "core",
   "core/block-editor",
   "core/editor",
   "core/notices",
