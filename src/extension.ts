@@ -30,7 +30,8 @@ export function activate(context: vscode.ExtensionContext) {
           console.log("Found useSelect in line");
 
           // Check if we're inside a select() call with a store name
-          const selectMatch = linePrefix.match(/select\(['"]([^'"]*)['"]\)\./);
+          const lineText = document.lineAt(position).text;
+          const selectMatch = lineText.match(/select\(['"]([^'"]*)['"]\)\./);
           console.log("Select match:", selectMatch);
 
           if (selectMatch && selectMatch[1]) {
@@ -94,8 +95,8 @@ export function activate(context: vscode.ExtensionContext) {
               return completionItem;
             });
           }
-        } else if (linePrefix.includes("{")) {
-          // We're in a destructuring pattern, look for useDispatch in the line
+        } else if (linePrefix.includes("{") || linePrefix.endsWith(",")) {
+          // We're in a destructuring pattern or after a comma, look for useDispatch in the line
           const lineText = document.lineAt(position).text;
           const storeMatch = lineText.match(
             /useDispatch\(\s*['"]([^'"]*)['"]\s*\)/
@@ -106,6 +107,34 @@ export function activate(context: vscode.ExtensionContext) {
             const actions = storeActions[storeName];
 
             if (actions) {
+              // Get the text between the curly braces
+              const destructuredMatch = lineText.match(/\{\s*([^}]*)\s*\}/);
+              if (destructuredMatch && destructuredMatch[1]) {
+                // Get the list of already selected actions
+                const selectedActions = destructuredMatch[1]
+                  .split(",")
+                  .map((action) => action.trim())
+                  .filter((action) => action.length > 0);
+
+                // Filter out already selected actions
+                const remainingActions = actions.filter(
+                  (action) => !selectedActions.includes(action.name)
+                );
+
+                return remainingActions.map((action) => {
+                  const completionItem = new vscode.CompletionItem(
+                    action.name,
+                    vscode.CompletionItemKind.Method
+                  );
+                  completionItem.detail = `Action: ${action.name}`;
+                  completionItem.documentation = new vscode.MarkdownString(
+                    action.description
+                  );
+                  return completionItem;
+                });
+              }
+
+              // If no destructured items yet, show all actions
               return actions.map((action) => {
                 const completionItem = new vscode.CompletionItem(
                   action.name,
@@ -128,20 +157,11 @@ export function activate(context: vscode.ExtensionContext) {
     '"',
     ".",
     "{",
-    "("
+    "(",
+    ","
   );
 
   context.subscriptions.push(hooksProvider);
-
-  // The command has been defined in the package.json file
-  const disposable = vscode.commands.registerCommand(
-    "wp-data-stores.helloWorld",
-    () => {
-      vscode.window.showInformationMessage("Hello World from wp-data-stores!");
-    }
-  );
-
-  context.subscriptions.push(disposable);
 }
 
 // This method is called when your extension is deactivated
