@@ -36,8 +36,48 @@ export const storeActions: Record<
     { name: "setAnnotations", description: "Set multiple annotations" },
   ],
   "core/block-directory": [
-    { name: "installBlockType", description: "Install a block type" },
-    { name: "uninstallBlockType", description: "Uninstall a block type" },
+    {
+      name: "addInstalledBlockType",
+      description:
+        "Returns an action object used to add a block type to the 'newly installed' tracking list",
+    },
+    {
+      name: "clearErrorNotice",
+      description: "Sets the error notice to empty for specific block",
+    },
+    {
+      name: "fetchDownloadableBlocks",
+      description:
+        "Returns an action object used in signalling that the downloadable blocks have been requested and are loading",
+    },
+    {
+      name: "installBlockType",
+      description: "Action triggered to install a block plugin",
+    },
+    {
+      name: "receiveDownloadableBlocks",
+      description:
+        "Returns an action object used in signalling that the downloadable blocks have been updated",
+    },
+    {
+      name: "removeInstalledBlockType",
+      description:
+        "Returns an action object used to remove a block type from the 'newly installed' tracking list",
+    },
+    {
+      name: "setErrorNotice",
+      description:
+        "Sets an error notice to be displayed to the user for a given block",
+    },
+    {
+      name: "setIsInstalling",
+      description:
+        "Returns an action object used to indicate install in progress",
+    },
+    {
+      name: "uninstallBlockType",
+      description: "Action triggered to uninstall a block plugin",
+    },
   ],
   "core/block-editor": [
     {
@@ -232,75 +272,472 @@ export const storeActions: Record<
       name: "updateBlockTypeSettings",
       description: "Update block type settings",
     },
-  ],
-  "core/commands": [
-    { name: "registerCommand", description: "Register a command" },
-    { name: "unregisterCommand", description: "Unregister a command" },
-    { name: "setCommands", description: "Set multiple commands" },
-  ],
-  "core/customize-widgets": [
-    { name: "setDeviceType", description: "Set the device type" },
     {
-      name: "setIsInserterOpened",
-      description: "Set if the inserter is opened",
+      name: "reapplyBlockTypeFilters",
+      description: "Reapplies block type filters",
     },
   ],
-  "core/data": [
-    { name: "addEntities", description: "Add entities to the store" },
-    { name: "receiveEntityRecords", description: "Receive entity records" },
-    { name: "saveEntityRecord", description: "Save an entity record" },
+  "core/commands": [
+    { name: "close", description: "Closes the command palette" },
+    { name: "open", description: "Opens the command palette" },
+    {
+      name: "registerCommand",
+      description: "Returns an action object used to register a new command",
+    },
+    { name: "registerCommandLoader", description: "Register command loader" },
+    {
+      name: "unregisterCommand",
+      description: "Returns an action object used to unregister a command",
+    },
+    {
+      name: "unregisterCommandLoader",
+      description: "Unregister command loader hook",
+    },
+  ],
+  "core/customize-widgets": [
+    {
+      name: "setIsInserterOpened",
+      description: "Returns an action object used to open/close the inserter",
+    },
   ],
   "core/edit-post": [
-    { name: "openGeneralSidebar", description: "Open the general sidebar" },
-    { name: "closeGeneralSidebar", description: "Close the general sidebar" },
-    { name: "toggleFeature", description: "Toggle a feature" },
+    {
+      name: "closeGeneralSidebar",
+      description:
+        "Returns an action object signalling that the user closed the sidebar",
+    },
+    {
+      name: "closeModal",
+      description:
+        "Returns an action object signalling that the user closed a modal",
+    },
+    {
+      name: "closePublishSidebar",
+      description:
+        "Returns an action object used in signalling that the user closed the publish sidebar",
+    },
+    {
+      name: "hideBlockTypes",
+      description: "Returns an action object used to hide block types",
+    },
+    {
+      name: "initializeMetaBoxes",
+      description: "Returns an action object used to initialize meta boxes",
+    },
+    {
+      name: "metaBoxUpdatesFailure",
+      description:
+        "Returns an action object used to signal that meta box updates failed",
+    },
+    {
+      name: "metaBoxUpdatesSuccess",
+      description:
+        "Returns an action object used to signal that meta box updates succeeded",
+    },
+    {
+      name: "openGeneralSidebar",
+      description:
+        "Returns an action object signalling that the user opened the sidebar",
+    },
+    {
+      name: "openModal",
+      description:
+        "Returns an action object signalling that the user opened a modal",
+    },
+    {
+      name: "openPublishSidebar",
+      description:
+        "Returns an action object used in signalling that the user opened the publish sidebar",
+    },
+    {
+      name: "removeEditorPanel",
+      description: "Returns an action object used to remove an editor panel",
+    },
+    {
+      name: "requestMetaBoxUpdates",
+      description: "Returns an action object used to request meta box updates",
+    },
+    {
+      name: "setAvailableMetaBoxesPerLocation",
+      description:
+        "Returns an action object used to set the available meta boxes per location",
+    },
+    {
+      name: "setIsEditingTemplate",
+      description:
+        "Returns an action object used to set whether the template is being edited",
+    },
+    {
+      name: "setIsInserterOpened",
+      description:
+        "Returns an action object used to set whether the inserter is opened",
+    },
+    {
+      name: "setIsListViewOpened",
+      description:
+        "Returns an action object used to set whether the list view is opened",
+    },
+    {
+      name: "showBlockTypes",
+      description: "Returns an action object used to show block types",
+    },
+    {
+      name: "switchEditorMode",
+      description: "Returns an action object used to switch the editor mode",
+    },
+    {
+      name: "toggleDistractionFree",
+      description:
+        "Returns an action object used to toggle distraction free mode",
+    },
+    {
+      name: "toggleEditorPanelEnabled",
+      description:
+        "Returns an action object used to toggle whether an editor panel is enabled",
+    },
+    {
+      name: "toggleEditorPanelOpened",
+      description:
+        "Returns an action object used to toggle whether an editor panel is opened",
+    },
+    {
+      name: "toggleFeature",
+      description: "Returns an action object used to toggle a feature",
+    },
+    {
+      name: "toggleFullscreenMode",
+      description: "Returns an action object used to toggle fullscreen mode",
+    },
+    {
+      name: "togglePinnedPluginItem",
+      description:
+        "Returns an action object used to toggle whether a plugin item is pinned",
+    },
+    {
+      name: "togglePublishSidebar",
+      description:
+        "Returns an action object used to toggle the publish sidebar",
+    },
+    {
+      name: "updatePreferredStyleVariations",
+      description:
+        "Returns an action object used to update preferred style variations",
+    },
   ],
   "core/edit-site": [
-    { name: "setTemplate", description: "Set the current template" },
-    { name: "setPage", description: "Set the current page" },
+    {
+      name: "addTemplate",
+      description:
+        "Action that adds a new template and sets it as the current template",
+    },
+    {
+      name: "closeGeneralSidebar",
+      description: "Action that closes the sidebar",
+    },
+    {
+      name: "openGeneralSidebar",
+      description: "Action that opens an editor sidebar",
+    },
+    {
+      name: "openNavigationPanelToMenu",
+      description:
+        "Opens the navigation panel and sets its active menu at the same time",
+    },
+    { name: "removeTemplate", description: "Action that removes a template" },
+    {
+      name: "revertTemplate",
+      description: "Reverts a template to its original theme-provided file",
+    },
+    {
+      name: "setEditedEntity",
+      description: "Action that sets an edited entity",
+    },
+    {
+      name: "setEditedPostContext",
+      description: "Set's the current block editor context",
+    },
+    {
+      name: "setHasPageContentFocus",
+      description:
+        "Sets whether or not the editor allows only page content to be edited",
+    },
+    {
+      name: "setIsInserterOpened",
+      description: "Returns an action object used to open/close the inserter",
+    },
+    {
+      name: "setIsListViewOpened",
+      description: "Returns an action object used to open/close the list view",
+    },
+    {
+      name: "setIsNavigationPanelOpened",
+      description: "Sets whether the navigation panel should be open",
+    },
+    {
+      name: "setIsSaveViewOpened",
+      description: "Sets whether the save view panel should be open",
+    },
+    {
+      name: "setNavigationMenu",
+      description: "Action that sets a navigation menu",
+    },
     {
       name: "setNavigationPanelActiveMenu",
-      description: "Set the active menu in the navigation panel",
+      description: "Action that sets the active navigation panel menu",
+    },
+    {
+      name: "setPage",
+      description: "Resolves the template for a page and displays both",
+    },
+    {
+      name: "setTemplate",
+      description:
+        "Action that sets a template, optionally fetching it from REST API",
+    },
+    {
+      name: "setTemplatePart",
+      description: "Action that sets a template part",
+    },
+    {
+      name: "switchEditorMode",
+      description: "Triggers an action used to switch editor mode",
+    },
+    {
+      name: "toggleDistractionFree",
+      description: "Action that toggles Distraction free mode",
+    },
+    { name: "toggleFeature", description: "Action that toggles a feature" },
+    {
+      name: "updateSettings",
+      description: "Action that updates the site editor settings",
     },
   ],
   "core/editor": [
-    { name: "editPost", description: "Edit the current post" },
-    { name: "savePost", description: "Save the current post" },
-    { name: "trashPost", description: "Move the current post to trash" },
-    { name: "updatePost", description: "Update the current post" },
-    { name: "lockPostSaving", description: "Lock post saving" },
+    { name: "autosave", description: "Autosaves the current post" },
+    { name: "clearSelectedBlock", description: "Clears the selected block" },
+    { name: "closePublishSidebar", description: "Closes the publish sidebar" },
+    { name: "createUndoLevel", description: "Creates an undo level" },
+    {
+      name: "disablePublishSidebar",
+      description: "Disables the publish sidebar",
+    },
+    { name: "editPost", description: "Edits the current post" },
+    {
+      name: "enablePublishSidebar",
+      description: "Enables the publish sidebar",
+    },
+    { name: "enterFormattedText", description: "Enters formatted text mode" },
+    { name: "exitFormattedText", description: "Exits formatted text mode" },
+    {
+      name: "hideInsertionPoint",
+      description: "Hides the block insertion point",
+    },
+    {
+      name: "insertBlock",
+      description: "Inserts a block at the specified position",
+    },
+    {
+      name: "insertBlocks",
+      description: "Inserts multiple blocks at the specified position",
+    },
+    { name: "insertDefaultBlock", description: "Inserts the default block" },
+    { name: "lockPostAutosaving", description: "Locks post autosaving" },
+    { name: "lockPostSaving", description: "Locks post saving" },
+    { name: "mergeBlocks", description: "Merges two blocks together" },
+    { name: "moveBlocksDown", description: "Moves blocks down" },
+    { name: "moveBlocksUp", description: "Moves blocks up" },
+    {
+      name: "moveBlockToPosition",
+      description: "Moves a block to a specific position",
+    },
+    { name: "multiSelect", description: "Selects multiple blocks" },
+    { name: "openPublishSidebar", description: "Opens the publish sidebar" },
+    { name: "receiveBlocks", description: "Receives blocks from the server" },
+    { name: "redo", description: "Redoes the last undone edit" },
+    { name: "refreshPost", description: "Refreshes the current post" },
+    { name: "removeBlock", description: "Removes a block by its client ID" },
+    {
+      name: "removeBlocks",
+      description: "Removes multiple blocks by their client IDs",
+    },
+    { name: "removeEditorPanel", description: "Removes an editor panel" },
+    {
+      name: "replaceBlock",
+      description: "Replaces a block with another block",
+    },
+    {
+      name: "replaceBlocks",
+      description: "Replaces multiple blocks with other blocks",
+    },
+    {
+      name: "resetBlocks",
+      description: "Resets all blocks to their initial state",
+    },
+    { name: "resetEditorBlocks", description: "Resets the editor blocks" },
+    { name: "resetPost", description: "Resets the current post" },
+    { name: "savePost", description: "Saves the current post" },
+    { name: "selectBlock", description: "Selects a block by its client ID" },
+    { name: "setDeviceType", description: "Sets the device type" },
+    { name: "setEditedPost", description: "Sets the edited post" },
+    {
+      name: "setIsInserterOpened",
+      description: "Sets whether the inserter is opened",
+    },
+    {
+      name: "setIsListViewOpened",
+      description: "Sets whether the list view is opened",
+    },
+    { name: "setRenderingMode", description: "Sets the rendering mode" },
+    { name: "setTemplateValidity", description: "Sets the template validity" },
+    { name: "setupEditor", description: "Sets up the editor" },
+    { name: "setupEditorState", description: "Sets up the editor state" },
+    {
+      name: "showInsertionPoint",
+      description: "Shows the block insertion point",
+    },
+    { name: "startMultiSelect", description: "Starts multi-selection mode" },
+    { name: "startTyping", description: "Starts typing mode" },
+    { name: "stopMultiSelect", description: "Stops multi-selection mode" },
+    { name: "stopTyping", description: "Stops typing mode" },
+    { name: "switchEditorMode", description: "Switches the editor mode" },
+    {
+      name: "synchronizeTemplate",
+      description: "Synchronizes the template with the blocks",
+    },
+    {
+      name: "toggleBlockMode",
+      description: "Toggles between visual and HTML mode for a block",
+    },
+    {
+      name: "toggleDistractionFree",
+      description: "Toggles distraction-free mode",
+    },
+    {
+      name: "toggleEditorPanelEnabled",
+      description: "Toggles whether an editor panel is enabled",
+    },
+    {
+      name: "toggleEditorPanelOpened",
+      description: "Toggles whether an editor panel is opened",
+    },
+    {
+      name: "togglePublishSidebar",
+      description: "Toggles the publish sidebar",
+    },
+    { name: "toggleSelection", description: "Toggles selection mode" },
+    { name: "toggleSpotlightMode", description: "Toggles spotlight mode" },
+    { name: "toggleTopToolbar", description: "Toggles the top toolbar" },
+    { name: "trashPost", description: "Moves the current post to trash" },
+    { name: "undo", description: "Undoes the last edit" },
+    { name: "unlockPostAutosaving", description: "Unlocks post autosaving" },
+    { name: "unlockPostSaving", description: "Unlocks post saving" },
+    { name: "updateBlock", description: "Updates a block's attributes" },
+    {
+      name: "updateBlockAttributes",
+      description: "Updates a block's attributes",
+    },
+    {
+      name: "updateBlockListSettings",
+      description: "Updates the settings for a block list",
+    },
+    {
+      name: "updateEditorSettings",
+      description: "Updates the editor settings",
+    },
+    { name: "updatePost", description: "Updates the current post" },
+    { name: "updatePostLock", description: "Updates the post lock" },
   ],
   "core/keyboard-shortcuts": [
-    { name: "registerShortcut", description: "Register a keyboard shortcut" },
+    {
+      name: "registerShortcut",
+      description: "Registers a new keyboard shortcut",
+    },
     {
       name: "unregisterShortcut",
-      description: "Unregister a keyboard shortcut",
+      description: "Unregisters a keyboard shortcut",
     },
   ],
   "core/notices": [
-    { name: "createNotice", description: "Create a new notice" },
-    { name: "removeNotice", description: "Remove a notice by its ID" },
-    { name: "removeAllNotices", description: "Remove all notices" },
+    {
+      name: "createErrorNotice",
+      description:
+        "Returns an action object used in signalling that an error notice is to be created",
+    },
+    {
+      name: "createInfoNotice",
+      description:
+        "Returns an action object used in signalling that an info notice is to be created",
+    },
+    {
+      name: "createNotice",
+      description:
+        "Returns an action object used in signalling that a notice is to be created",
+    },
+    {
+      name: "createSuccessNotice",
+      description:
+        "Returns an action object used in signalling that a success notice is to be created",
+    },
+    {
+      name: "createWarningNotice",
+      description:
+        "Returns an action object used in signalling that a warning notice is to be created",
+    },
+    {
+      name: "removeAllNotices",
+      description:
+        "Removes all notices from a given context. Defaults to the default context",
+    },
+    {
+      name: "removeNotice",
+      description:
+        "Returns an action object used in signalling that a notice is to be removed",
+    },
+    { name: "removeNotices", description: "Removes notices by context" },
   ],
   "core/nux": [
-    { name: "setFeatureState", description: "Set the state of a feature" },
-    { name: "setGuideState", description: "Set the state of a guide" },
+    {
+      name: "disableTips",
+      description:
+        "Returns an action object that, when dispatched, prevents all tips from showing again",
+    },
+    {
+      name: "dismissTip",
+      description:
+        "Returns an action object that, when dispatched, dismisses the given tip. A dismissed tip will not show again",
+    },
+    {
+      name: "enableTips",
+      description:
+        "Returns an action object that, when dispatched, makes all tips show again",
+    },
+    {
+      name: "triggerGuide",
+      description:
+        "Returns an action object that, when dispatched, presents a guide that takes the user through a series of tips step by step",
+    },
   ],
   "core/preferences": [
-    { name: "set", description: "Set a preference value" },
-    { name: "toggle", description: "Toggle a preference" },
-  ],
-  "core/reusable-blocks": [
     {
-      name: "convertBlockToStatic",
-      description: "Convert a reusable block to static",
+      name: "set",
+      description:
+        "Returns an action object used in signalling that a preference should be set to a value",
     },
     {
-      name: "convertBlocksToReusable",
-      description: "Convert blocks to reusable",
+      name: "setDefaults",
+      description:
+        "Returns an action object used in signalling that preference defaults should be set",
     },
-    { name: "deleteReusableBlock", description: "Delete a reusable block" },
-    { name: "saveReusableBlock", description: "Save a reusable block" },
+    {
+      name: "setPersistenceLayer",
+      description:
+        "Sets the persistence layer. When a persistence layer is set, the preferences store will call get immediately and update the store state to the value returned, and call set with all preferences whenever a preference changes value",
+    },
+    {
+      name: "toggle",
+      description:
+        "Returns an action object used in signalling that a preference should be toggled",
+    },
   ],
   "core/rich-text": [
     { name: "applyFormat", description: "Apply a format to the selected text" },
@@ -309,10 +746,55 @@ export const storeActions: Record<
       description: "Remove a format from the selected text",
     },
   ],
-  "core/viewport": [
+  "core/viewport": [],
+  "core/edit-widgets": [
     {
-      name: "setIsMatching",
-      description: "Set whether the viewport matches a query",
+      name: "closeGeneralSidebar",
+      description:
+        "Returns an action object signalling that the user closed the sidebar",
+    },
+    {
+      name: "moveBlockToWidgetArea",
+      description: "Action that handles moving a block between widget areas",
+    },
+    {
+      name: "persistStubPost",
+      description: "Persists a stub post with given ID to core data store",
+    },
+    {
+      name: "saveEditedWidgetAreas",
+      description:
+        "Converts all the blocks from edited widget areas into widgets, and submits a batch request to save everything at once",
+    },
+    {
+      name: "saveWidgetArea",
+      description:
+        "Converts all the blocks from a widget area specified by ID into widgets, and submits a batch request to save everything at once",
+    },
+    {
+      name: "saveWidgetAreas",
+      description:
+        "Converts all the blocks from specified widget areas into widgets, and submits a batch request to save everything at once",
+    },
+    {
+      name: "setIsInserterOpened",
+      description: "Returns an action object used to open/close the inserter",
+    },
+    {
+      name: "setIsListViewOpened",
+      description: "Returns an action object used to open/close the list view",
+    },
+    {
+      name: "setIsWidgetAreaOpen",
+      description: "Sets the open state of the widget area",
+    },
+    {
+      name: "setWidgetAreasOpenState",
+      description: "Sets the open state of all the widget areas",
+    },
+    {
+      name: "setWidgetIdForClientId",
+      description: "Sets the clientId stored for a particular widgetId",
     },
   ],
 };
