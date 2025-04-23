@@ -50,7 +50,7 @@ export function activate(context: vscode.ExtensionContext) {
                 );
                 completionItem.detail = `Selector: ${selector.name}`;
                 completionItem.documentation = new vscode.MarkdownString(
-                  selector.description
+                  `**${selector.name}**\n\n${selector.description}`
                 );
                 return completionItem;
               });
@@ -128,7 +128,7 @@ export function activate(context: vscode.ExtensionContext) {
                   );
                   completionItem.detail = `Action: ${action.name}`;
                   completionItem.documentation = new vscode.MarkdownString(
-                    action.description
+                    `**${action.name}**\n\n${action.description}`
                   );
                   return completionItem;
                 });
@@ -142,7 +142,7 @@ export function activate(context: vscode.ExtensionContext) {
                 );
                 completionItem.detail = `Action: ${action.name}`;
                 completionItem.documentation = new vscode.MarkdownString(
-                  action.description
+                  `**${action.name}**\n\n${action.description}`
                 );
                 return completionItem;
               });
