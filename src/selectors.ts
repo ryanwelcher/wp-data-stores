@@ -89,6 +89,7 @@ export const storeSelectors: Record<
     { name: "getRevision", description: "Get a revision" },
     { name: "getRevisions", description: "Get all revisions" },
     { name: "getThemeSupports", description: "Get theme supports" },
+    { name: "getUploadPermissions", description: "Get upload permissions" },
     { name: "getUndoEdit", description: "Get the next undo edit" },
     {
       name: "getUserPatternCategories",
@@ -125,6 +126,28 @@ export const storeSelectors: Record<
     {
       name: "isSavingEntityRecord",
       description: "Check if an entity record is being saved",
+    },
+    {
+      name: "isResolving",
+      description: "Check if a selector is being resolved",
+    },
+  ],
+  "core/annotations": [
+    { name: "getAnnotations", description: "Get all annotations" },
+    {
+      name: "getAnnotationsForBlock",
+      description: "Get annotations for a specific block",
+    },
+  ],
+  "core/block-directory": [
+    { name: "getDownloadableBlocks", description: "Get downloadable blocks" },
+    {
+      name: "getInstalledBlockTypes",
+      description: "Get installed block types",
+    },
+    {
+      name: "isInstalling",
+      description: "Check if a block is being installed",
     },
   ],
   "core/block-editor": [
@@ -347,33 +370,36 @@ export const storeSelectors: Record<
       description: "Check if a block is being transformed between patterns",
     },
   ],
-  "core/editor": [
-    { name: "getCurrentPost", description: "Get the current post object" },
-    { name: "getCurrentPostId", description: "Get the current post ID" },
+  "core/blocks": [
+    { name: "getBlockType", description: "Get a block type" },
+    { name: "getBlockTypes", description: "Get all block types" },
+    { name: "getBlockCategories", description: "Get block categories" },
+    { name: "getDefaultBlockName", description: "Get the default block name" },
     {
-      name: "getEditedPostAttribute",
-      description: "Get a specific attribute of the edited post",
+      name: "getFreeformContentHandlerName",
+      description: "Get the freeform content handler name",
     },
     {
-      name: "getEditedPostContent",
-      description: "Get the content of the edited post",
+      name: "getUnregisteredTypeHandlerName",
+      description: "Get the unregistered type handler name",
     },
     {
-      name: "isCurrentPostPublished",
-      description: "Check if the current post is published",
+      name: "getGroupingBlockName",
+      description: "Get the grouping block name",
     },
+    { name: "getBlockSettings", description: "Get block settings" },
+    { name: "getBlockTypeSettings", description: "Get block type settings" },
   ],
-  "core/notices": [
-    { name: "getNotices", description: "Get all notices" },
-    { name: "getNoticesByStatus", description: "Get notices by status" },
+  "core/commands": [
+    { name: "getCommands", description: "Get all commands" },
+    { name: "getCommand", description: "Get a specific command" },
   ],
-  "core/interface": [
+  "core/customize-widgets": [
+    { name: "getDeviceType", description: "Get the device type" },
     {
-      name: "getActiveComplementaryArea",
-      description: "Get the active complementary area",
+      name: "isInserterOpened",
+      description: "Check if the inserter is opened",
     },
-    { name: "isFeatureActive", description: "Check if a feature is active" },
-    { name: "isItemPinned", description: "Check if an item is pinned" },
   ],
   "core/data": [
     { name: "getEntityRecord", description: "Get a specific entity record" },
@@ -406,6 +432,18 @@ export const storeSelectors: Record<
   "core/preferences": [
     { name: "get", description: "Get a preference value" },
     { name: "isFeatureActive", description: "Check if a feature is active" },
+  ],
+  "core/reusable-blocks": [
+    { name: "getReusableBlock", description: "Get a reusable block" },
+    { name: "getReusableBlocks", description: "Get all reusable blocks" },
+    {
+      name: "isSavingReusableBlock",
+      description: "Check if a reusable block is being saved",
+    },
+    {
+      name: "isDeletingReusableBlock",
+      description: "Check if a reusable block is being deleted",
+    },
   ],
   "core/rich-text": [
     { name: "getFormatTypes", description: "Get available format types" },

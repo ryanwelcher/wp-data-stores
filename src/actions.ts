@@ -30,6 +30,15 @@ export const storeActions: Record<
     { name: "saveEntityRecord", description: "Save an entity record" },
     { name: "undo", description: "Undo the last edit" },
   ],
+  "core/annotations": [
+    { name: "addAnnotation", description: "Add an annotation" },
+    { name: "removeAnnotation", description: "Remove an annotation" },
+    { name: "setAnnotations", description: "Set multiple annotations" },
+  ],
+  "core/block-directory": [
+    { name: "installBlockType", description: "Install a block type" },
+    { name: "uninstallBlockType", description: "Uninstall a block type" },
+  ],
   "core/block-editor": [
     {
       name: "insertBlock",
@@ -204,29 +213,37 @@ export const storeActions: Record<
       description: "Set the client IDs of the blocks being inserted",
     },
   ],
-  "core/editor": [
-    { name: "editPost", description: "Edit the current post" },
-    { name: "savePost", description: "Save the current post" },
-    { name: "trashPost", description: "Move the current post to trash" },
-    { name: "updatePost", description: "Update the current post" },
-    { name: "lockPostSaving", description: "Lock post saving" },
-  ],
-  "core/notices": [
-    { name: "createNotice", description: "Create a new notice" },
-    { name: "removeNotice", description: "Remove a notice by its ID" },
-    { name: "removeAllNotices", description: "Remove all notices" },
-  ],
-  "core/interface": [
+  "core/blocks": [
+    { name: "addBlockTypes", description: "Add block types" },
+    { name: "removeBlockTypes", description: "Remove block types" },
+    { name: "setBlockCategories", description: "Set block categories" },
+    { name: "setDefaultBlockName", description: "Set default block name" },
     {
-      name: "enableComplementaryArea",
-      description: "Enable a complementary area",
+      name: "setFreeformContentHandlerName",
+      description: "Set freeform content handler name",
     },
     {
-      name: "disableComplementaryArea",
-      description: "Disable a complementary area",
+      name: "setUnregisteredTypeHandlerName",
+      description: "Set unregistered type handler name",
     },
-    { name: "pinItem", description: "Pin an item" },
-    { name: "unpinItem", description: "Unpin an item" },
+    { name: "setGroupingBlockName", description: "Set grouping block name" },
+    { name: "updateBlockSettings", description: "Update block settings" },
+    {
+      name: "updateBlockTypeSettings",
+      description: "Update block type settings",
+    },
+  ],
+  "core/commands": [
+    { name: "registerCommand", description: "Register a command" },
+    { name: "unregisterCommand", description: "Unregister a command" },
+    { name: "setCommands", description: "Set multiple commands" },
+  ],
+  "core/customize-widgets": [
+    { name: "setDeviceType", description: "Set the device type" },
+    {
+      name: "setIsInserterOpened",
+      description: "Set if the inserter is opened",
+    },
   ],
   "core/data": [
     { name: "addEntities", description: "Add entities to the store" },
@@ -246,13 +263,44 @@ export const storeActions: Record<
       description: "Set the active menu in the navigation panel",
     },
   ],
-  "core/navigation": [
-    { name: "setSelectedMenuId", description: "Set the selected menu ID" },
-    { name: "setNavigationPost", description: "Set the navigation post" },
+  "core/editor": [
+    { name: "editPost", description: "Edit the current post" },
+    { name: "savePost", description: "Save the current post" },
+    { name: "trashPost", description: "Move the current post to trash" },
+    { name: "updatePost", description: "Update the current post" },
+    { name: "lockPostSaving", description: "Lock post saving" },
+  ],
+  "core/keyboard-shortcuts": [
+    { name: "registerShortcut", description: "Register a keyboard shortcut" },
+    {
+      name: "unregisterShortcut",
+      description: "Unregister a keyboard shortcut",
+    },
+  ],
+  "core/notices": [
+    { name: "createNotice", description: "Create a new notice" },
+    { name: "removeNotice", description: "Remove a notice by its ID" },
+    { name: "removeAllNotices", description: "Remove all notices" },
+  ],
+  "core/nux": [
+    { name: "setFeatureState", description: "Set the state of a feature" },
+    { name: "setGuideState", description: "Set the state of a guide" },
   ],
   "core/preferences": [
     { name: "set", description: "Set a preference value" },
     { name: "toggle", description: "Toggle a preference" },
+  ],
+  "core/reusable-blocks": [
+    {
+      name: "convertBlockToStatic",
+      description: "Convert a reusable block to static",
+    },
+    {
+      name: "convertBlocksToReusable",
+      description: "Convert blocks to reusable",
+    },
+    { name: "deleteReusableBlock", description: "Delete a reusable block" },
+    { name: "saveReusableBlock", description: "Save a reusable block" },
   ],
   "core/rich-text": [
     { name: "applyFormat", description: "Apply a format to the selected text" },
